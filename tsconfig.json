@@ -3,7 +3,7 @@
 	"compilerOptions": {
 		"declaration": false,
 		"target": "es2015",
-		"types": [ "intern", "cypress" ],
+		"types": [ "intern" ],
 		"lib": [
 			"dom",
 			"es5",
