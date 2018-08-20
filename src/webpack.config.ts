@@ -15,7 +15,7 @@ export default function webpackConfigFactory(args: BuildArgs): Configuration {
 	const packageJson = fs.existsSync(packageJsonPath) ? require(packageJsonPath) : {};
 	const themeName = args.name;
 	const themeVersion = args.release || packageJson.version;
-	const themePath = path.join(basePath, themeName);
+	const themePath = path.join(basePath, 'src', themeName);
 
 	return {
 		entry: {

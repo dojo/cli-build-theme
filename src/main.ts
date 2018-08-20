@@ -1,11 +1,11 @@
 import { Command, Helper, OptionsHelper } from '@dojo/cli/interfaces';
+import { copy } from 'cpx';
+import * as ora from 'ora';
+import * as rimraf from 'rimraf';
+import * as ts from 'typescript';
 import * as webpack from 'webpack';
 import { BuildArgs } from './interfaces';
 import getConfig from './webpack.config';
-
-import * as rimraf from 'rimraf';
-import { copy } from 'cpx';
-import * as ts from 'typescript';
 
 function buildTypescript(name: string) {
 	const program = ts.createProgram([`${name}/index.ts`], {
@@ -35,7 +35,6 @@ const command: Command = {
 		});
 	},
 	run(helper: Helper, args: BuildArgs) {
-		const { name } = args;
 		const createTask = (callback: any) => new Promise((resolve, reject) => {
 			callback((error?: Error) => {
 				if (error) {
@@ -45,13 +44,20 @@ const command: Command = {
 			});
 		});
 
+		const { name } = args;
+		const spinner = ora(`building ${name} theme`).start();
 		return createTask((callback: any) => rimraf(`dist/${name}`, callback))
 			.then(() => buildTypescript(name))
-			.then(() => createTask((callback: any) => copy(`${name}/*.{d.ts,css}`, `dist/${name}`, callback)))
+			.then(() => createTask((callback: any) => copy(`src/${name}/*.{d.ts,css}`, `dist/${name}`, callback)))
 			.then(() => createTask((callback: any) => {
 				const compiler = webpack(getConfig(args));
 				compiler.run(callback);
-			}));
+			}))
+			.then(() => {
+				spinner.succeed('build successful');
+			}, (error) => {
+				spinner.fail(error);
+			});
 	}
 };
 
