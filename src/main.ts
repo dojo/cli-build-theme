@@ -24,6 +24,8 @@ const command: Command = {
 		});
 	},
 	run(helper: Helper, args: BuildArgs) {
+		const { name } = args;
+		const basePath = process.cwd();
 		const createTask = (callback: any) => new Promise((resolve, reject) => {
 			callback((error?: Error) => {
 				if (error) {
@@ -38,8 +40,6 @@ const command: Command = {
 			child.on('exit', (code) => code !== 0 ? reject(new Error(errorMessage)) : resolve());
 		});
 
-		const { name } = args;
-		const basePath = process.cwd();
 		const spinner = ora(`building ${name} theme`).start();
 		return createTask((callback: any) => rimraf(`dist/${name}`, callback))
 			.then(() => createChildProcess('tcm', [`src/${name}`, '*.m.css'], 'Failed to build CSS modules'))

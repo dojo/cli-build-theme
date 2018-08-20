@@ -5,9 +5,9 @@ import { Chunk, Compiler, Configuration, DefinePlugin } from 'webpack';
 
 import { BuildArgs } from './interfaces';
 
-const TemplatedPathPlugin = require('webpack/lib/TemplatedPathPlugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TemplatedPathPlugin = require('webpack/lib/TemplatedPathPlugin');
 
 export default function webpackConfigFactory(args: BuildArgs): Configuration {
 	const basePath = process.cwd();
@@ -32,7 +32,7 @@ export default function webpackConfigFactory(args: BuildArgs): Configuration {
 			modules: [basePath, path.join(basePath, 'node_modules')],
 			extensions: ['.ts', '.js'],
 			alias: {
-				'fonts': path.resolve(basePath, 'fonts')
+				assets: path.resolve(basePath, 'assets')
 			}
 		},
 		devtool: 'source-map',
@@ -71,11 +71,12 @@ export default function webpackConfigFactory(args: BuildArgs): Configuration {
 					]
 				},
 				{
+					include: themePath,
 					test: /.*\.(gif|png|jpe?g|svg|eot|ttf|woff|woff2)$/i,
 					loader: 'file-loader?hash=sha512&digest=hex&name=[hash:base64:8].[ext]',
 					options: {
-						outputPath: 'fonts/',
-						publicPath: '/fonts/'
+						outputPath: 'assets/',
+						publicPath: '/assets/'
 					}
 				},
 				{
