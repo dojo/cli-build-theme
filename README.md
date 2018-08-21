@@ -29,7 +29,7 @@ If no `release` is specified, then the version from `package.json` will be used.
 dojo build theme -n my-theme -r 1.2.3
 ```
 
-The above will create a new `dist/my-theme` directory at the project root that contains:
+The above will create a new `dist/src/my-theme` directory at the project root that contains:
 
 - All raw `.m.css` files. Copying these files as-is enables composition (i.e., `composes: root from 'node_modules/my-theme/my-widget'`)
 - An `assets` directory containing all fonts and images included within the theme's directory

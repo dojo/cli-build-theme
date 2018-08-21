@@ -41,10 +41,10 @@ const command: Command = {
 		});
 
 		const spinner = ora(`building ${name} theme`).start();
-		return createTask((callback: any) => rimraf(`dist/${name}`, callback))
+		return createTask((callback: any) => rimraf(`dist/src/${name}`, callback))
 			.then(() => createChildProcess('tcm', [`src/${name}`, '*.m.css'], 'Failed to build CSS modules'))
-			.then(() => createChildProcess('tsc', ['--outDir', `dist/${name}`], `Failed to build ${name}/index.d.ts`))
-			.then(() => createTask((callback: any) => copy(`src/${name}/*.{d.ts,css}`, `dist/${name}`, callback)))
+			.then(() => createChildProcess('tsc', ['--outDir', `dist/src/${name}`], `Failed to build ${name}/index.d.ts`))
+			.then(() => createTask((callback: any) => copy(`src/${name}/*.{d.ts,css}`, `dist/src/${name}`, callback)))
 			.then(() => createTask((callback: any) => {
 				const compiler = webpack(getConfig(args));
 				compiler.run(callback);

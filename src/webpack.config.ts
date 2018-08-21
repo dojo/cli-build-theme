@@ -24,7 +24,7 @@ export default function webpackConfigFactory(args: BuildArgs): Configuration {
 		},
 		output: {
 			filename: '[custom].js',
-			path: path.join(basePath, `dist/${themeName}`),
+			path: path.join(basePath, `dist/src/${themeName}`),
 			library: '[name]',
 			libraryTarget: 'umd'
 		},

@@ -34,12 +34,12 @@ describe('webpack.config', () => {
 		});
 	});
 
-	it('should output to dist/{theme name}', () => {
+	it('should output to dist/src/{theme name}', () => {
 		const factory = mockModule.getModuleUnderTest().default;
 		const config = factory({ name: 'my-theme' });
 		assert.deepEqual(config.output, {
 			filename: '[custom].js',
-			path: join(process.cwd(), 'dist/my-theme'),
+			path: join(process.cwd(), 'dist/src/my-theme'),
 			library: '[name]',
 			libraryTarget: 'umd'
 		});

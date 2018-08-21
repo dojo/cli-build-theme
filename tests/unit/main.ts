@@ -118,7 +118,7 @@ describe('command', () => {
 	it('should clear the output directory', () => {
 		const main = mockModule.getModuleUnderTest().default;
 		return main.run(getMockConfiguration(), { name: 'my-theme' }).then(() => {
-			assert.isTrue(mockModule.getMock('rimraf').ctor.calledWith('dist/my-theme'));
+			assert.isTrue(mockModule.getMock('rimraf').ctor.calledWith('dist/src/my-theme'));
 		});
 	});
 
@@ -149,7 +149,7 @@ describe('command', () => {
 			const basePath = process.cwd();
 			const command = join(basePath, 'node_modules/.bin/tsc');
 			const { spawn } = mockModule.getMock('child_process');
-			assert.isTrue(spawn.calledWith(command, ['--outDir', 'dist/my-theme'], { cwd: basePath }));
+			assert.isTrue(spawn.calledWith(command, ['--outDir', 'dist/src/my-theme'], { cwd: basePath }));
 		});
 	});
 
@@ -168,7 +168,7 @@ describe('command', () => {
 		const main = mockModule.getModuleUnderTest().default;
 		return main.run(getMockConfiguration(), { name: 'my-theme' }).then(() => {
 			const { copy } = mockModule.getMock('cpx');
-			assert.isTrue(copy.calledWith('src/my-theme/*.{d.ts,css}', 'dist/my-theme'));
+			assert.isTrue(copy.calledWith('src/my-theme/*.{d.ts,css}', 'dist/src/my-theme'));
 		});
 	});
 });
