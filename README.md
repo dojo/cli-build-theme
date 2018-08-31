@@ -2,6 +2,8 @@
 
 A [`@dojo/cli`](https://github.com/dojo/cli) command for building [Dojo](https://dojo.io) themes that are intended for distribution.
 
+If you are a theme author and need to distribute your theme files across multiple applications, then `@dojo/cli-build-theme` helps you do so. The build outputs the processed CSS modules, CSS source maps, an `index.js` theme module with a corresponding `.d.ts`, as well as any associated assets. The ouput also includes versioned `index.css` and `index.js` equivalents that are compatible with Dojo custom elements.
+
 >Note: if you are using [ `dojo create theme`](https://github.com/dojo/cli-create-theme) within an existing application or Dojo custom element, then there is no need to use this package. As long as the theme files are within the existing build pipeline, they will be included in the build generated with [`@dojo/cli-build-app`](https://github.com/dojo/cli-build-app) or [`@dojo/cli-build-widget`](https://github.com/dojo/cli-build-widget);
 
 - [Usage](#usage)
