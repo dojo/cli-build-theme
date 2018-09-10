@@ -74,5 +74,45 @@ describe('webpack.config', () => {
 		const config = factory({ name: 'my-theme' });
 		assert.strictEqual(config.devtool, 'source-map');
 	});
+
+	it('should output an index.js file', () => {
+		const factory = mockModule.getModuleUnderTest().default;
+		const config = factory({ name: 'my-theme', release: '1.1.1' });
+		const outputFileNamePlugin = config.plugins[config.plugins.length - 1];
+		const mainTemplatePlugin = stub();
+		const mockPlugin = stub().callsFake((name: string, callback: Function) => {
+			if (name === 'asset-path') {
+				mainTemplatePlugin(callback('[custom].js', {
+					chunk: { name: 'my-theme' }
+				}));
+			} else if (name === 'compilation') {
+				callback({
+					mainTemplate: { plugin: mockPlugin }
+				});
+			}
+		});
+		outputFileNamePlugin.apply({ plugin: mockPlugin });
+		assert.isTrue(mainTemplatePlugin.calledWith('index.js'));
+	});
+
+	it('should output a custom element file named `{themeName}-{version}.js`', () => {
+		const factory = mockModule.getModuleUnderTest().default;
+		const config = factory({ name: 'my-theme', release: '1.1.1' });
+		const outputFileNamePlugin = config.plugins[config.plugins.length - 1];
+		const mainTemplatePlugin = stub();
+		const mockPlugin = stub().callsFake((name: string, callback: Function) => {
+			if (name === 'asset-path') {
+				mainTemplatePlugin(callback('[custom].js', {
+					chunk: { name: 'my-theme-custom-element' }
+				}));
+			} else if (name === 'compilation') {
+				callback({
+					mainTemplate: { plugin: mockPlugin }
+				});
+			}
+		});
+		outputFileNamePlugin.apply({ plugin: mockPlugin });
+		assert.isTrue(mainTemplatePlugin.calledWith('my-theme-1.1.1.js'));
+	});
 });
 
