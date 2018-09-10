@@ -18,7 +18,7 @@ export default class MockModule {
 	constructor(moduleUnderTestPath: string, require: NodeRequire) {
 		this.moduleUnderTestPath = require.resolve(moduleUnderTestPath);
 		this.basePath = path.dirname(this.moduleUnderTestPath);
-		this.sandbox = sinon.sandbox.create();
+		this.sandbox = sinon.createSandbox();
 		this.mocks = {};
 	}
 
