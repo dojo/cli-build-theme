@@ -16,8 +16,7 @@ test_script:
   - node --version
   - npm --version
   # run tests
-  - npm run test
-  - npm run uploadCoverage
+  - npm run test && npm run uploadCoverage
 
 # Don't actually build.
 build: off
