@@ -64,7 +64,7 @@ const command: Command = {
 				)
 			)
 			.then(() =>
-				createChildProcess('tsc', ['--outDir', join('dist', 'src', name), '--project', `tsconfig-${name}.json`], `Failed to build ${name}/index.d.ts`)
+				createChildProcess('tsc', ['--outDir', join('dist', 'src', name), '--project', join(relative('', tmpDir), 'tsconfig.json')], `Failed to build ${name}/index.d.ts`)
 			)
 			.then(() =>
 				createTask((callback: any) =>
