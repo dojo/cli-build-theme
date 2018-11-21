@@ -91,15 +91,16 @@ const command: Command = {
 					compiler.run(callback);
 				})
 			)
-			.then(rmTmpDir, rmTmpDir)
 			.then(
 				() => {
 					spinner.succeed('build successful');
+					rmTmpDir();
 				},
 				(error) => {
 					spinner.fail(error);
+					rmTmpDir();
 				}
-			);
+			)
 	}
 };
 
