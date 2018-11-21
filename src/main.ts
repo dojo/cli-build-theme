@@ -46,7 +46,7 @@ const command: Command = {
 			});
 
 		let tmpDir: string;
-		const rmTmpDir = () => (tmpDir && fs.unlinkSync(join(tmpDir, 'tsconfig.json')), fs.rmdirSync(tmpDir));
+		const rmTmpDir = () => tmpDir && (fs.unlinkSync(join(tmpDir, 'tsconfig.json')), fs.rmdirSync(tmpDir));
 		const spinner = ora(`building ${name} theme`).start();
 		return createTask((callback: any) => rimraf(join('dist', 'src', name), callback))
 			.then(() => createChildProcess('tcm', [join('src', name, '*.m.css')], 'Failed to build CSS modules'))
