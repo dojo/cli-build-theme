@@ -1,7 +1,7 @@
 const { describe, it, beforeEach, afterEach } = intern.getInterface('bdd');
 const { assert } = intern.getPlugin('chai');
 import { join, sep } from 'path';
-import { SinonStub, stub } from 'sinon';
+import { SinonStub, stub, match } from 'sinon';
 import MockModule from '../support/MockModule';
 
 let mockModule: MockModule;
@@ -138,7 +138,7 @@ describe('command', () => {
 			const basePath = process.cwd();
 			const command = join(basePath, 'node_modules/.bin/tsc');
 			const spawn = mockModule.getMock('cross-spawn').ctor;
-			assert.isTrue(spawn.calledWith(command, ['--outDir', join('dist', 'src', 'my-theme')], { cwd: basePath }));
+			assert.isTrue(spawn.calledWith(command, ['--outDir', join('dist', 'src', 'my-theme'), '--project', match.string], { cwd: basePath }));
 		});
 	});
 
