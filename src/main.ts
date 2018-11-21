@@ -1,6 +1,7 @@
 import { Command, Helper, OptionsHelper } from '@dojo/cli/interfaces';
 import * as spawn from 'cross-spawn';
 import { copy } from 'cpx';
+import * as fs from 'fs';
 import * as ora from 'ora';
 import { join } from 'path';
 import * as rimraf from 'rimraf';
@@ -47,7 +48,17 @@ const command: Command = {
 		return createTask((callback: any) => rimraf(join('dist', 'src', name), callback))
 			.then(() => createChildProcess('tcm', [join('src', name, '*.m.css')], 'Failed to build CSS modules'))
 			.then(() =>
-				createChildProcess('tsc', ['--outDir', join('dist', 'src', name)], `Failed to build ${name}/index.d.ts`)
+				createTask((callback: any) =>
+					fs.existsSync(`tsconfig-${name}.json`) ? callback() : fs.writeFile(`tsconfig-${name}.json`, `{
+	"extends": "./tsconfig.json",
+	"include": [
+		"./src/${name}/**/*.ts"
+	]
+}`, callback)
+				)
+			)
+			.then(() =>
+				createChildProcess('tsc', ['--outDir', join('dist', 'src', name), '--project', `tsconfig-${name}.json`], `Failed to build ${name}/index.d.ts`)
 			)
 			.then(() =>
 				createTask((callback: any) =>
