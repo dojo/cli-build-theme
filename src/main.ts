@@ -55,16 +55,29 @@ const command: Command = {
 					fs.mkdtemp(os.tmpdir(), (error: Error | undefined, folder: string) => {
 						if (error) {
 							callback(error);
-						}
-						else {
+						} else {
 							tmpDir = folder;
-							fs.writeFile(join(tmpDir, 'tsconfig.json'), `{ "extends": "${join(relative(tmpDir, ''), 'tsconfig.json')}", "include": [ "${join(relative(tmpDir, ''), 'src', name, '**', '*.ts')}" ] }`, callback);
+							fs.writeFile(
+								join(tmpDir, 'tsconfig.json'),
+								`{ "extends": "${join(relative(tmpDir, ''), 'tsconfig.json')}", "include": [ "${join(
+									relative(tmpDir, ''),
+									'src',
+									name,
+									'**',
+									'*.ts'
+								)}" ] }`,
+								callback
+							);
 						}
 					})
 				)
 			)
 			.then(() =>
-				createChildProcess('tsc', ['--outDir', join('dist', 'src', name), '--project', join(relative('', tmpDir), 'tsconfig.json')], `Failed to build ${name}/index.d.ts`)
+				createChildProcess(
+					'tsc',
+					['--outDir', join('dist', 'src', name), '--project', join(relative('', tmpDir), 'tsconfig.json')],
+					`Failed to build ${name}/index.d.ts`
+				)
 			)
 			.then(() =>
 				createTask((callback: any) =>
