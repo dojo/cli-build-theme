@@ -57,15 +57,11 @@ const command: Command = {
 							callback(error);
 						} else {
 							tmpDir = folder;
+							const tsconfig = join(relative(tmpDir, ''), 'tsconfig.json');
+							const include = join(relative(tmpDir, ''), 'src', name, '**', '*.ts');
 							fs.writeFile(
 								join(tmpDir, 'tsconfig.json'),
-								`{ "extends": "${join(relative(tmpDir, ''), 'tsconfig.json')}", "include": [ "${join(
-									relative(tmpDir, ''),
-									'src',
-									name,
-									'**',
-									'*.ts'
-								)}" ] }`,
+								`{ "extends": "${tsconfig}", "include": [ "${include}" ] }`,
 								callback
 							);
 						}
