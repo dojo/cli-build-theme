@@ -100,7 +100,7 @@ const command: Command = {
 					spinner.fail(error);
 					rmTmpDir();
 				}
-			)
+			);
 	}
 };
 
