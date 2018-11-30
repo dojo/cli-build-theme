@@ -4,7 +4,7 @@ import { copy } from 'cpx';
 import * as fs from 'fs';
 import * as ora from 'ora';
 import * as os from 'os';
-import { join, relative } from 'path';
+import { join, relative, sep } from 'path';
 import * as rimraf from 'rimraf';
 import * as webpack from 'webpack';
 import { BuildArgs } from './interfaces';
@@ -52,7 +52,7 @@ const command: Command = {
 			.then(() => createChildProcess('tcm', [join('src', name, '*.m.css')], 'Failed to build CSS modules'))
 			.then(() =>
 				createTask((callback: any) =>
-					fs.mkdtemp(os.tmpdir(), (error: Error | undefined, folder: string) => {
+					fs.mkdtemp(os.tmpdir() + sep, (error: Error | undefined, folder: string) => {
 						if (error) {
 							callback(error);
 						} else {
