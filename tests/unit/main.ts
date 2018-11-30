@@ -89,15 +89,25 @@ describe('command', () => {
 		);
 	});
 
+	it('should generate the index.d.ts file', () => {
+		const main = mockModule.getModuleUnderTest().default;
+		return main.run(getMockConfiguration(), { name: 'my-theme' }).then(() => {
+			const basePath = process.cwd();
+			const command = join(basePath, 'node_modules/.bin/tsc');
+			const spawn = mockModule.getMock('cross-spawn').ctor;
+			assert.isTrue(
+				spawn.calledWith(command, ['--outDir', join('dist', 'src', 'my-theme'), '--project', match.string], {
+					cwd: basePath
+				})
+			);
+		});
+	});
+
 	it('rejects if an error occurs', () => {
 		error = new Error('failed!');
 		const main = mockModule.getModuleUnderTest().default;
 		return main.run(getMockConfiguration(), { name: 'my-theme' }).then(() => {
-			const { message } = mockSpinner.fail.args[0][0];
-			assert.isTrue(
-				mockSpinner.fail.calledWith(error),
-				`Expected error "${error!.message}" but received "${message}"`
-			);
+			assert.isTrue(mockSpinner.fail.called);
 		});
 	});
 
@@ -133,20 +143,6 @@ describe('command', () => {
 		return main.run(getMockConfiguration(), { name: 'my-theme' }).then(() => {
 			const { message } = mockSpinner.fail.args[0][0];
 			assert.strictEqual(message, 'Failed to build CSS modules');
-		});
-	});
-
-	it('should generate the index.d.ts file', () => {
-		const main = mockModule.getModuleUnderTest().default;
-		return main.run(getMockConfiguration(), { name: 'my-theme' }).then(() => {
-			const basePath = process.cwd();
-			const command = join(basePath, 'node_modules/.bin/tsc');
-			const spawn = mockModule.getMock('cross-spawn').ctor;
-			assert.isTrue(
-				spawn.calledWith(command, ['--outDir', join('dist', 'src', 'my-theme'), '--project', match.string], {
-					cwd: basePath
-				})
-			);
 		});
 	});
 
