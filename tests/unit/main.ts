@@ -93,7 +93,11 @@ describe('command', () => {
 		error = new Error('failed!');
 		const main = mockModule.getModuleUnderTest().default;
 		return main.run(getMockConfiguration(), { name: 'my-theme' }).then(() => {
-			assert.isTrue(mockSpinner.fail.calledWith(error));
+			const { message } = mockSpinner.fail.args[0][0];
+			assert.isTrue(
+				mockSpinner.fail.calledWith(error),
+				`Expected error "${error!.message}" but received "${message}"`
+			);
 		});
 	});
 
