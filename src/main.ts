@@ -41,9 +41,9 @@ const command: Command = {
 		const createChildProcess = (command: string, args: string[], errorMessage: string) =>
 			new Promise((resolve, reject) => {
 				const child = spawn(join(basePath, 'node_modules', '.bin', command), args, { cwd: basePath });
-				const logs: (string | Buffer)[] = [];
-				child.stderr.on('data', (data) => console.log(data.toString()));
+				const logs: string[] = [];
 				child.stdout.on('data', (data) => logs.push(data.toString()));
+				child.stderr.on('data', (data) => console.error(data.toString()));
 				child.on('error', reject);
 				child.on('exit', (code) => {
 					if (code !== 0) {

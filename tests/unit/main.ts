@@ -1,7 +1,7 @@
 const { describe, it, beforeEach, afterEach } = intern.getInterface('bdd');
 const { assert } = intern.getPlugin('chai');
 import { join, sep } from 'path';
-import { SinonStub, stub, match } from 'sinon';
+import { SinonStub, stub, match, SinonSpy } from 'sinon';
 import MockModule from '../support/MockModule';
 
 let mockModule: MockModule;
@@ -9,6 +9,12 @@ let mockSpinner: any;
 let error: Error | null;
 let tcmCode = 0 | 1;
 let tscCode = 0 | 1;
+
+let stdOut: string[] | undefined;
+let stdError: (string | { toString(): string })[] | undefined;
+let logStub: SinonSpy;
+let errorStub: SinonSpy;
+
 let stats: any;
 let runStub: SinonStub;
 let exitStub: SinonStub;
@@ -44,7 +50,21 @@ describe('command', () => {
 		};
 		tcmCode = 0;
 		tscCode = 0;
+		logStub = stub(console, 'log');
+		errorStub = stub(console, 'error');
 		mockModule.getMock('cross-spawn').ctor.callsFake((commandPath: string) => ({
+			stderr: {
+				on(_: string, cb: Function) {
+					stdError && cb(stdError);
+				}
+			},
+			stdout: {
+				on(_: string, cb: Function) {
+					if (stdOut) {
+						stdOut.forEach((message) => cb(message));
+					}
+				}
+			},
 			on: stub().callsFake((name: string, callback: Function) => {
 				if (name === 'exit') {
 					const command = commandPath.split(sep).pop();
@@ -68,6 +88,8 @@ describe('command', () => {
 	afterEach(() => {
 		mockModule.destroy();
 		exitStub.restore();
+		logStub.restore();
+		errorStub.restore();
 	});
 
 	it('registers the command options', () => {
@@ -108,6 +130,41 @@ describe('command', () => {
 		const main = mockModule.getModuleUnderTest().default;
 		return main.run(getMockConfiguration(), { name: 'my-theme' }).then(() => {
 			assert.isTrue(mockSpinner.fail.called);
+		});
+	});
+
+	it('only logs errors if the process completes successfully', () => {
+		stdOut = ['This is what was logged', 'It is only shown on error'];
+		stdError = [
+			{
+				toString() {
+					return 'This is the logged error';
+				}
+			}
+		];
+		const main = mockModule.getModuleUnderTest().default;
+		return main.run(getMockConfiguration(), { name: 'my-theme' }).then(() => {
+			assert.isTrue(errorStub.calledWith('This is the logged error'));
+			assert.isTrue(logStub.notCalled);
+		});
+	});
+
+	it('logs errors and logs if the process does not finish successfully', () => {
+		tscCode = 1;
+		stdOut = ['This is what was logged', 'It is only shown on error'];
+		stdError = [
+			{
+				toString() {
+					return 'This is the logged error';
+				}
+			}
+		];
+		error = new Error('failed!');
+		const main = mockModule.getModuleUnderTest().default;
+		return main.run(getMockConfiguration(), { name: 'my-theme' }).then(() => {
+			assert.isTrue(errorStub.calledWith('This is the logged error'));
+			assert.isTrue(logStub.calledWith('This is what was logged'));
+			assert.isTrue(logStub.calledWith('It is only shown on error'));
 		});
 	});
 
