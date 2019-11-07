@@ -43,7 +43,7 @@ const postcssImportConfig = {
 };
 
 const postcssPresetConfig = {
-	browsers: ['last 2 versions', 'ie >= 10'],
+	browserslist: ['last 2 versions', 'ie >= 10'],
 	insertBefore: {
 		'color-mod-function': colorToColorMod
 	},
