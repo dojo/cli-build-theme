@@ -84,7 +84,7 @@ const command: Command = {
 		return {
 			copy: {
 				path: __dirname,
-				files: [moveBuildOptions(`${this.group}-${this.name}`), './webpack.config.js', './ejected.config.js']
+				files: [moveBuildOptions(`${this.group}-${this.name}`), './webpack.config.js', './ejected.config.js', 'template/theme-installer.js']
 			},
 			hints: [
 				`to build run ${chalk.underline(
