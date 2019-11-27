@@ -56,7 +56,7 @@ ${chalk.red(errors.map((error: string) => stripAnsi(error)) as any)}
 	}
 
 	logUpdate(`
-${logSymbols.info} cli-build-widget: ${version}
+${logSymbols.info} cli-build-theme: ${version}
 ${logSymbols.info} typescript: ${typescript.version}
 ${logSymbols.success} hash: ${stats.hash}
 ${logSymbols.error} errors: ${errorCount}

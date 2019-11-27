@@ -129,7 +129,7 @@ export default function webpackConfigFactory(args: any): Configuration {
 				{
 					test: /\.css$/,
 					exclude: themesPath,
-					use: [MiniCssExtractPlugin.loader, 'css-loader?sourceMap'] // MiniCssExtractPlugin.loader,
+					use: [MiniCssExtractPlugin.loader, 'css-loader?sourceMap']
 				},
 				{
 					test: /\.m\.css.js$/,
