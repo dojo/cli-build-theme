@@ -3,7 +3,9 @@ import * as MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import * as path from 'path';
 import * as fs from 'fs';
 import { emitAllFactory } from '@dojo/webpack-contrib/emit-all-plugin/EmitAllPlugin';
+import * as OptimizeCssAssetsPlugin from 'optimize-css-assets-webpack-plugin';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
+import * as cssnano from 'cssnano';
 
 const postcssPresetEnv = require('postcss-preset-env');
 const postcssModules = require('postcss-modules');
@@ -58,7 +60,13 @@ export default function webpackConfigFactory(args: any): Configuration {
 		mode: 'production',
 		entry: themes.reduce(
 			(entry, theme) => {
-				entry[theme] = [path.join(themesPath, theme, 'index.ts')];
+				entry[theme] = [
+					`imports-loader?THEME_NAME=${theme}&theme=${path.join(themesPath, theme, 'index.ts')}!${path.join(
+						__dirname,
+						'template',
+						'theme-installer.js'
+					)}`
+				];
 				return entry;
 			},
 			{} as { [index: string]: any }
@@ -82,6 +90,17 @@ export default function webpackConfigFactory(args: any): Configuration {
 				filename: `[name]/[name]-${themeVersion}.css`
 			}),
 			emitAll.plugin,
+			new OptimizeCssAssetsPlugin({
+				cssProcessor: cssnano as any,
+				cssProcessorOptions: {
+					map: {
+						inline: false
+					}
+				},
+				cssProcessorPluginOptions: {
+					preset: ['default', { calc: false }]
+				}
+			}),
 			new CleanWebpackPlugin()
 		],
 		module: {
