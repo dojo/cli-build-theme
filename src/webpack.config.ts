@@ -61,7 +61,7 @@ export default function webpackConfigFactory(args: any): Configuration {
 		entry: themes.reduce(
 			(entry, theme) => {
 				entry[theme] = [
-					`imports-loader?THEME_NAME=>'${theme}',${theme}&theme=${path.join(themesPath, theme, 'index.ts')}!${path.join(
+					`imports-loader?THEME_NAME=>'${theme}',theme=${path.join(themesPath, theme, 'index.ts')}!${path.join(
 						__dirname,
 						'template',
 						'theme-installer.js'
