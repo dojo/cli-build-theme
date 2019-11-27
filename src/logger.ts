@@ -28,17 +28,17 @@ export default function logger(stats: any, config: any) {
 			if (child.errors.length) {
 				errors = [...errors, ...child.errors];
 				errorCount = errorCount + child.errors.length;
-            }
-            
+			}
+
 			return child.assets.map((asset: any) => {
 				const size = (asset.size / 1000).toFixed(2);
 				const assetName = `${asset.name.replace(/^\//, '')}`;
 				return `${assetName} ${chalk.yellow(`(${size}kb)`)}`;
 			});
 		})
-        .filter((output: string) => output);
-        
-    assets.sort();
+		.filter((output: string) => output);
+
+	assets.sort();
 	if (warningCount) {
 		signOff = chalk.yellow('The build completed with warnings.');
 		warningMsg = `
