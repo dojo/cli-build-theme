@@ -61,11 +61,11 @@ export default function webpackConfigFactory(args: any): Configuration {
 		entry: themes.reduce(
 			(entry, theme) => {
 				entry[theme] = [
-					`imports-loader?THEME_NAME=>'${theme}',theme=${path.join(themesPath, theme, 'index.ts')}!${path.join(
-						__dirname,
-						'template',
-						'theme-installer.js'
-					)}`
+					`imports-loader?THEME_NAME=>'${theme}',theme=${path.join(
+						themesPath,
+						theme,
+						'index.ts'
+					)}!${path.join(__dirname, 'template', 'theme-installer.js')}`
 				];
 				return entry;
 			},
@@ -170,7 +170,7 @@ export default function webpackConfigFactory(args: any): Configuration {
 							options: {
 								importLoaders: 1,
 								modules: {
-									localIdentName: '[name]__[local]__[hash:base64:5]'
+									localIdentName: '[local]'
 								},
 								sourceMap: true
 							}
@@ -184,7 +184,7 @@ export default function webpackConfigFactory(args: any): Configuration {
 										getJSON: (filename: string, json: any) => {
 											cssModulesLoader.classesMap.set(filename, json);
 										},
-										generateScopedName: '[local]'
+										generateScopedName: '[name]__[local]__[hash:base64:5]'
 									}),
 									postcssPresetEnv(postcssPresetConfig)
 								]
