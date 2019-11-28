@@ -6,10 +6,10 @@ import { emitAllFactory } from '@dojo/webpack-contrib/emit-all-plugin/EmitAllPlu
 import * as OptimizeCssAssetsPlugin from 'optimize-css-assets-webpack-plugin';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import * as cssnano from 'cssnano';
+import { classesMap } from '@dojo/webpack-contrib/css-module-class-map-loader/loader';
 
 const postcssPresetEnv = require('postcss-preset-env');
 const postcssModules = require('postcss-modules');
-const cssModulesLoader = require('@dojo/cli-build-theme/cssModulesLoader');
 const removeEmpty = (items: any[]) => items.filter((item) => item);
 
 const basePath = process.cwd();
@@ -164,7 +164,7 @@ export default function webpackConfigFactory(args: any): Configuration {
 							options: {}
 						},
 						'@dojo/webpack-contrib/css-module-decorator-loader',
-						'@dojo/cli-build-theme/cssModulesLoader',
+						'@dojo/webpack-contrib/css-module-class-map-loader/loader',
 						{
 							loader: 'css-loader',
 							options: {
@@ -182,7 +182,7 @@ export default function webpackConfigFactory(args: any): Configuration {
 								plugins: [
 									postcssModules({
 										getJSON: (filename: string, json: any) => {
-											cssModulesLoader.classesMap.set(filename, json);
+											classesMap.set(filename, json);
 										},
 										generateScopedName: '[name]__[local]__[hash:base64:5]'
 									}),
