@@ -80,11 +80,12 @@ export default function webpackConfigFactory(args: any): Configuration {
 				publicPath: (url: string) => {
 					return url.replace(new RegExp(`(${themes.join('|')})(/|\\\\)`), '');
 				},
-				outputPath(url: string) {
-					if (url.indexOf(theme) === 0) {
-						return url;
+				outputPath(url: string, resource: string) {
+					const themeTest = new RegExp(path.join(basePath, 'src', 'theme', theme));
+					if (!themeTest.test(resource)) {
+						return `${theme}/${url}`;
 					}
-					return `${theme}/${url}`;
+					return url;
 				}
 			}
 		};
