@@ -1,4 +1,4 @@
-import { Configuration } from 'webpack';
+import { Plugin, Configuration } from 'webpack';
 import * as MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import * as path from 'path';
 import * as fs from 'fs';
@@ -136,7 +136,7 @@ export default function webpackConfigFactory(args: any): Configuration {
 				}
 			}),
 			new CleanWebpackPlugin()
-		],
+		] as Plugin[],
 		module: {
 			rules: removeEmpty([
 				{
