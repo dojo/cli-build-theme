@@ -30,5 +30,27 @@ if (theme && typeof window !== 'undefined') {
 			}
 		});
 	}
+	if (!window.dojoce.variant) {
+		Object.defineProperty(window.dojoce, 'variant', {
+			set: function(value) {
+				value = value === '' ? 'noVariant' : value;
+				if (value === window.dojoce.variant) {
+					return;
+				}
+				if (
+					window.dojoce.themes[window.dojoce.theme] &&
+					window.dojoce.themes[window.dojoce.theme].variants &&
+					window.dojoce.themes[window.dojoce.theme].variants[value]
+				) {
+					window.dojoce._variant = value;
+					window.dispatchEvent(new CustomEvent('dojo-theme-set', {}));
+				}
+			},
+			get: function() {
+				return window.dojoce._variant;
+			}
+		});
+	}
 	window.dojoce.theme = THEME_NAME;
 }
+
