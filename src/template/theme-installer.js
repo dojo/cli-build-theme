@@ -13,7 +13,7 @@ if (theme && typeof window !== 'undefined') {
 
 	window.dojoce.themes[THEME_NAME] = theme;
 
-	if (!window.dojoce.theme) {
+	if (!window.dojoce.hasOwnProperty('theme')) {
 		Object.defineProperty(window.dojoce, 'theme', {
 			set: function(value) {
 				value = value === '' ? 'noTheme' : value;
@@ -30,7 +30,7 @@ if (theme && typeof window !== 'undefined') {
 			}
 		});
 	}
-	if (!window.dojoce.variant) {
+	if (!window.dojoce.hasOwnProperty('variant')) {
 		Object.defineProperty(window.dojoce, 'variant', {
 			set: function(value) {
 				value = value === '' ? 'noVariant' : value;
